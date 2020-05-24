@@ -9,6 +9,7 @@ jobs:
     name: docker push
     runs-on: ubuntu-16.04
     #if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && github.repository == 'commaai/openpilot-apks'
+    if: false
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker image
@@ -17,11 +18,11 @@ jobs:
           #docker pull docker.io/commaai/openpilot-apks:latest || true
           #docker build --cache-from docker.io/commaai/openpilot-apks:latest -t apks -f Dockerfile .
           docker build -t apks -f Dockerfile .
-      #- name: Push to dockerhub
-      #  run: |
-      #    docker login -u wmelching -p ${{ secrets.DOCKERHUB_TOKEN }}
-      #    docker tag apks docker.io/commaai/openpilot-apks:latest
-      #    docker push docker.io/commaai/openpilot-apks:latest
+      - name: Push to dockerhub
+        run: |
+          docker login -u wmelching -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker tag apks docker.io/commaai/openpilot-apks:latest
+          docker push docker.io/commaai/openpilot-apks:latest
 
   offroad:
     name: offroad
@@ -42,5 +43,3 @@ jobs:
         with:
           name: ai.comma.plus.offroad.apk
           path: ai.comma.plus.offroad.apk
-
-
